@@ -2,6 +2,7 @@ import { Children, createContext, useContext, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { HiEllipsisVertical } from 'react-icons/hi2';
 import styled from 'styled-components';
+import { UseOutsideClick } from '../hooks/UseOutsideClick';
 
 const Menu = styled.div`
   display: flex;
@@ -71,6 +72,8 @@ function Menus({ children }) {
   const [position, setPosition] = useState(null);
   const close = () => setOpenId('');
   const open = setOpenId;
+
+  // const ref = UseOutsideClick(close);
   return (
     <MenuContext.Provider
       value={{ openId, close, open, position, setPosition }}
@@ -98,12 +101,15 @@ function Toggle({ id }) {
   );
 }
 function List({ id, children }) {
-  const { openId, position } = useContext(MenuContext);
+  const { openId, position, close } = useContext(MenuContext);
+  const ref = UseOutsideClick(close);
 
   if (openId !== id) return null;
 
   return createPortal(
-    <StyledList position={position}>{children}</StyledList>,
+    <StyledList position={position} ref={ref}>
+      {children}
+    </StyledList>,
     document.body
   );
 }
