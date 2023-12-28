@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getBookings } from '../../services/apiBookings';
 
 export function UseBookings() {
+  const [searchParam] = UseBookings();
   const {
     data: bookings,
     error,
@@ -13,7 +14,3 @@ export function UseBookings() {
 
   return [bookings, error, isLoading];
 }
-
-
-
-
