@@ -6,13 +6,16 @@ import { signUp as signupApi } from '../../services/apiAuth';
 export function useSignup() {
   const navigate = useNavigate();
   const { mutate: signup, isPending } = useMutation({
-    mutationFn: ({ email, password }) => signupApi({ email, password }),
+    mutationFn: signupApi,
     onSuccess: (user) => {
       console.log(user);
-      toast.success('Account sucessfully created, kindly check your email adderess');
-      navigate('/login');
+      toast.success(
+        'Account sucessfully created, kindly check your email adderess'
+      );
+      //  navigate('/login');
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       toast.error('Something went wrong');
     },
   });

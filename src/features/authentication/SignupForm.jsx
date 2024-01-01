@@ -4,16 +4,22 @@ import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Input from '../../ui/Input';
 import { useSignup } from './UseSignup';
+import SpinnerMini from '../../ui/SpinnerMini';
 
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {
   const { signup, isPending } = useSignup();
-  const { register, formState, getValues, handleSubmit } = useForm();
+  const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
 
   function onSubmit({ fullName, email, password }) {
-    signup();
+    signup(
+      { fullName, email, password },
+      {
+        onSettled: () => reset(),
+      }
+    );
   }
 
   return (
@@ -73,10 +79,17 @@ function SignupForm() {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation='secondary' type='reset' disabled={isPending}>
+        <Button
+          variation='secondary'
+          type='reset'
+          disabled={isPending}
+          onClick={reset}
+        >
           Cancel
         </Button>
-        <Button disabled={isPending}>Create new user</Button>
+        <Button disabled={isPending}>
+          {isPending ? <SpinnerMini /> : 'Create new user'}
+        </Button>
       </FormRow>
     </Form>
   );
